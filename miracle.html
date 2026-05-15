@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIRACLE Hoops Academy</title>
+    <style>
+        :root {
+            --ink: #f8fafc;
+            --muted: #cbd5e1;
+            --line: rgba(255, 255, 255, 0.18);
+            --panel: rgba(9, 14, 28, 0.72);
+            --accent: #ff7a1a;
+            --accent-2: #21d4fd;
+            --court: #f8c471;
+            --headline-font: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+            --body-font: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            font-family: var(--body-font);
+            background: #080b14;
+            overflow-x: hidden;
+        }
+
+        .video-background,
+        .video-background::after {
+            position: fixed;
+            inset: 0;
+        }
+
+        /* Full-page moving basketball background video. */
+        .video-background {
+            z-index: -3;
+            overflow: hidden;
+        }
+
+        .video-background::after {
+            content: "";
+            z-index: 1;
+            background:
+                linear-gradient(90deg, rgba(4, 8, 18, 0.92), rgba(4, 8, 18, 0.5), rgba(4, 8, 18, 0.84)),
+                radial-gradient(circle at 82% 16%, rgba(255, 122, 26, 0.26), transparent 34%),
+                radial-gradient(circle at 10% 86%, rgba(33, 212, 253, 0.2), transparent 30%);
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.12) contrast(1.08);
+        }
+
+        .page {
+            position: relative;
+            min-height: 100vh;
+            padding: 28px clamp(18px, 4vw, 58px) 42px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1180px;
+            margin: 0 auto 58px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            display: grid;
+            width: 44px;
+            height: 44px;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            color: #111827;
+            background: linear-gradient(135deg, var(--court), var(--accent));
+            box-shadow: 0 12px 34px rgba(255, 122, 26, 0.24);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(8, 12, 24, 0.48);
+            backdrop-filter: blur(16px);
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 9px 14px;
+            border-radius: 999px;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+            gap: clamp(26px, 5vw, 64px);
+            align-items: center;
+            max-width: 1180px;
+            margin: 0 auto 46px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 14px;
+            color: var(--accent);
+            font-size: 0.82rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--headline-font);
+            letter-spacing: 0;
+        }
+
+        .hero h1 {
+            max-width: 760px;
+            margin: 0 0 18px;
+            font-size: clamp(3.2rem, 8vw, 7.2rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            max-width: 640px;
+            margin: 0;
+            color: var(--muted);
+            font-size: clamp(1rem, 1.6vw, 1.2rem);
+            line-height: 1.65;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 18px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--ink);
+            font-weight: 900;
+            text-decoration: none;
+            background: rgba(8, 12, 24, 0.62);
+            backdrop-filter: blur(14px);
+        }
+
+        .button.primary {
+            color: #111827;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--court), var(--accent));
+        }
+
+        /* Main hero image box on the right side of the homepage. */
+        .image-placeholder {
+            position: relative;
+            display: grid;
+            min-height: 360px;
+            place-items: center;
+            overflow: hidden;
+            border: 1px dashed rgba(255, 255, 255, 0.38);
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(255, 122, 26, 0.22), rgba(33, 212, 253, 0.16)),
+                rgba(8, 12, 24, 0.62);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.32);
+            animation: floatPanel 6s ease-in-out infinite;
+        }
+
+        /* Image sizing for the hero image and the three smaller image cards. */
+        .image-placeholder img,
+        .mini-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-placeholder img {
+            position: absolute;
+            inset: 0;
+        }
+
+        .image-placeholder::before,
+        .image-placeholder::after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+        }
+
+        .image-placeholder::before {
+            width: 210px;
+            height: 210px;
+        }
+
+        .image-placeholder::after {
+            width: 118px;
+            height: 118px;
+        }
+
+        .placeholder-text {
+            position: relative;
+            z-index: 2;
+            max-width: 260px;
+            padding: 14px 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--muted);
+            background: rgba(8, 12, 24, 0.72);
+            backdrop-filter: blur(14px);
+        }
+
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            max-width: 1180px;
+            margin: 0 auto 38px;
+        }
+
+        .stat {
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(8, 12, 24, 0.64);
+            backdrop-filter: blur(16px);
+        }
+
+        .stat b {
+            display: block;
+            color: var(--court);
+            font-family: var(--headline-font);
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 1;
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .section-title {
+            max-width: 1180px;
+            margin: 0 auto 18px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: clamp(1.9rem, 4vw, 3.2rem);
+            text-transform: uppercase;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            max-width: 1180px;
+            margin: 0 auto 38px;
+        }
+
+        .feature-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(8, 12, 24, 0.68);
+            backdrop-filter: blur(16px);
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: -1.2s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: -2.4s;
+        }
+
+        /* Three homepage feature image slots: Training, Teams, and Players. */
+        .mini-placeholder {
+            display: grid;
+            height: 180px;
+            place-items: center;
+            color: rgba(248, 250, 252, 0.78);
+            font-weight: 900;
+            text-transform: uppercase;
+            background:
+                linear-gradient(135deg, rgba(255, 122, 26, 0.32), rgba(33, 212, 253, 0.18)),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 18px);
+        }
+
+        .mini-placeholder {
+            overflow: hidden;
+        }
+
+        .feature-card div:last-child {
+            padding: 18px;
+        }
+
+        .feature-card small {
+            color: var(--accent-2);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .feature-card h3 {
+            margin: 8px 0;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .float-shape {
+            position: fixed;
+            width: 68px;
+            height: 68px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: drift 14s linear infinite;
+        }
+
+        .float-shape::before,
+        .float-shape::after {
+            content: "";
+            position: absolute;
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .float-shape::before {
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+        }
+
+        .float-shape::after {
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+        }
+
+        .shape-one {
+            left: 8%;
+            bottom: 10%;
+        }
+
+        .shape-two {
+            right: 9%;
+            top: 18%;
+            width: 48px;
+            height: 48px;
+            animation-delay: -7s;
+        }
+
+        footer {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        @keyframes floatPanel {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-14px); }
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { translate: 0 0; }
+            50% { translate: 0 -9px; }
+        }
+
+        @keyframes drift {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.52; }
+            50% { transform: translate3d(18px, -34px, 0) rotate(180deg); opacity: 0.9; }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); opacity: 0.52; }
+        }
+
+        @media (max-width: 900px) {
+            .hero,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-strip {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .nav {
+                align-items: start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page {
+                padding-inline: 16px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                border-radius: 8px;
+                flex-wrap: wrap;
+            }
+
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .image-placeholder {
+                min-height: 290px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background video: change ballground.mp4 here if you want a different homepage video. -->
+    <div class="video-background" aria-hidden="true">
+        <video autoplay muted loop playsinline>
+            <source src="ballground.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <span class="float-shape shape-one"></span>
+    <span class="float-shape shape-two"></span>
+
+    <main class="page">
+        <!-- Main navigation links for the site pages. -->
+        <nav class="nav" aria-label="Main navigation">
+            <div class="brand">
+                <span class="logo">MH</span>
+                <span>MIRACLE Hoops Academy</span>
+            </div>
+            <div class="nav-links">
+                <a class="active" href="miracle.html">Home</a>
+                <a href="news.html">News</a>
+                <a href="teams.html">Teams</a>
+                <a href="label.html">Training</a>
+            </div>
+        </nav>
+
+        <!-- Hero section: headline, intro text, buttons, and the main homepage image. -->
+        <section class="hero">
+            <div>
+                <span class="eyebrow">Train. Compete. Rise.</span>
+                <h1>MIRACLE Hoops Academy</h1>
+                <p>A high-energy basketball home for player development, team culture, game news, and the next athletes ready to make noise on the court.</p>
+                <div class="hero-actions">
+                    <a class="button primary" href="news.html">View News</a>
+                    <a class="button" href="teams.html">Explore Teams</a>
+                </div>
+            </div>
+            <!-- Main hero image: replace Instagram.jpg with your chosen image file. -->
+            <div class="image-placeholder" aria-label="Hero image placeholder">
+                <img src="Instagram.jpg" alt="MIRACLE Hoops Academy players">
+            </div>
+        </section>
+
+        <!-- Quick academy stats shown below the hero section. -->
+        <section class="stats-strip" aria-label="Academy highlights">
+            <div class="stat">
+                <b>24</b>
+                <span>Weekly training sessions</span>
+            </div>
+            <div class="stat">
+                <b>5</b>
+                <span>Player development groups</span>
+            </div>
+            <div class="stat">
+                <b>12</b>
+                <span>Showcase games planned</span>
+            </div>
+            <div class="stat">
+                <b>1</b>
+                <span>Academy standard</span>
+            </div>
+        </section>
+
+        <section class="section-title">
+            <h2>Academy Focus</h2>
+        </section>
+
+        <!-- Feature cards: each mini-placeholder contains one image for that card. -->
+        <section class="feature-grid" aria-label="Homepage image placeholders">
+            <article class="feature-card">
+                <!-- Training image: change skillslab.jpg to replace this card image. -->
+                <div class="mini-placeholder">
+                    <img src="skillslab.jpg" alt="Basketball skills lab training">
+                </div>
+                <div>
+                    <small>Training</small>
+                    <h3>Skills Lab</h3>
+                    <p>Add a training photo here for shooting, handles, footwork, or strength work.</p>
+                </div>
+            </article>
+            <article class="feature-card">
+                <!-- Teams/Game Day image: change heat.jpg to replace this card image. -->
+                <div class="mini-placeholder">
+                    <img src="heat.jpg" alt="Basketball game day action">
+                </div>
+                <div>
+                    <small>Teams</small>
+                    <h3>Game Day</h3>
+                    <p>Use this spot for a team huddle, match highlight, or tournament image.</p>
+                </div>
+            </article>
+            <article class="feature-card">
+                <!-- Player Spotlight image: change spotlight.jpg to replace this card image. -->
+                <div class="mini-placeholder">
+                    <img src="spotlight.jpg" alt="Basketball player spotlight">
+                </div>
+                <div>
+                    <small>Players</small>
+                    <h3>Spotlight</h3>
+                    <p>Drop in a player portrait or action shot when you are ready to customize it.</p>
+                </div>
+            </article>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 MIRACLE Hoops Academy. Built for the next generation of court leaders.</p>
+        </footer>
+    </main>
+</body>
+</html>

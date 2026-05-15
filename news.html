@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Hoops Academy News</title>
+    <style>
+        :root {
+            --ink: #f8fafc;
+            --muted: #cbd5e1;
+            --line: rgba(255, 255, 255, 0.18);
+            --panel: rgba(9, 14, 28, 0.72);
+            --accent: #ff7a1a;
+            --accent-2: #21d4fd;
+            --court: #f8c471;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            background: #080b14;
+            overflow-x: hidden;
+        }
+
+        .video-background,
+        .video-background::after {
+            position: fixed;
+            inset: 0;
+        }
+
+        .video-background {
+            z-index: -3;
+            overflow: hidden;
+        }
+
+        .video-background::after {
+            content: "";
+            z-index: 1;
+            background:
+                linear-gradient(90deg, rgba(4, 8, 18, 0.9), rgba(4, 8, 18, 0.46), rgba(4, 8, 18, 0.82)),
+                radial-gradient(circle at 78% 12%, rgba(255, 122, 26, 0.26), transparent 34%),
+                radial-gradient(circle at 12% 88%, rgba(33, 212, 253, 0.2), transparent 30%);
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.12) contrast(1.08);
+        }
+
+        .page {
+            position: relative;
+            min-height: 100vh;
+            padding: 28px clamp(18px, 4vw, 58px) 54px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1180px;
+            margin: 0 auto 54px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            display: grid;
+            width: 44px;
+            height: 44px;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            color: #111827;
+            background: linear-gradient(135deg, var(--court), var(--accent));
+            box-shadow: 0 12px 34px rgba(255, 122, 26, 0.24);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(8, 12, 24, 0.48);
+            backdrop-filter: blur(16px);
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 9px 14px;
+            border-radius: 999px;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+            gap: clamp(26px, 5vw, 64px);
+            align-items: end;
+            max-width: 1180px;
+            margin: 0 auto 42px;
+        }
+
+        .hero h1 {
+            max-width: 780px;
+            margin: 0 0 18px;
+            font-size: clamp(3rem, 8vw, 6.7rem);
+            line-height: 0.9;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            max-width: 620px;
+            margin: 0;
+            color: var(--muted);
+            font-size: clamp(1rem, 1.6vw, 1.2rem);
+            line-height: 1.65;
+        }
+
+        .headline-panel {
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.32);
+            backdrop-filter: blur(18px);
+            animation: floatPanel 6s ease-in-out infinite;
+        }
+
+        .headline-panel span {
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .headline-panel h2 {
+            margin: 10px 0 10px;
+            font-size: clamp(1.35rem, 2.4vw, 2.1rem);
+            line-height: 1.08;
+        }
+
+        .headline-panel p {
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+
+        .ticker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 1180px;
+            margin: 0 auto 36px;
+        }
+
+        .ticker span {
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            background: rgba(8, 12, 24, 0.55);
+            backdrop-filter: blur(14px);
+        }
+
+        .section-title {
+            max-width: 1180px;
+            margin: 0 auto 18px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            text-transform: uppercase;
+        }
+
+        .players {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(170px, 1fr));
+            gap: 16px;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .player-card {
+            position: relative;
+            min-height: 352px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(8, 12, 24, 0.62);
+            box-shadow: 0 22px 55px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+            animation: cardFloat 5.8s ease-in-out infinite;
+            transition: transform 220ms ease, border-color 220ms ease;
+        }
+
+        .player-card:nth-child(2) { animation-delay: -0.9s; }
+        .player-card:nth-child(3) { animation-delay: -1.8s; }
+        .player-card:nth-child(4) { animation-delay: -2.7s; }
+        .player-card:nth-child(5) { animation-delay: -3.6s; }
+
+        .player-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(255, 122, 26, 0.75);
+        }
+
+        .player-card img,
+        .player-card .poster {
+            width: 100%;
+            height: 218px;
+            object-fit: cover;
+            display: block;
+            background: linear-gradient(135deg, rgba(255, 122, 26, 0.9), rgba(33, 212, 253, 0.72));
+        }
+
+        .poster {
+            display: grid;
+            place-items: center;
+            color: rgba(7, 11, 22, 0.82);
+            font-size: 4.5rem;
+            font-weight: 900;
+        }
+
+        .player-info {
+            position: relative;
+            z-index: 1;
+            padding: 16px;
+        }
+
+        .player-info small {
+            color: var(--accent-2);
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .player-info h3 {
+            margin: 8px 0 8px;
+            font-size: 1.25rem;
+        }
+
+        .player-info p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .stats {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .stats b {
+            flex: 1;
+            padding: 8px 6px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            color: #111827;
+            font-size: 0.84rem;
+            text-align: center;
+            background: var(--court);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            max-width: 1180px;
+            margin: 34px auto 0;
+        }
+
+        .news-card {
+            padding: 20px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(8, 12, 24, 0.68);
+            backdrop-filter: blur(16px);
+        }
+
+        .news-card strong {
+            color: var(--accent);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .news-card h3 {
+            margin: 10px 0;
+            font-size: 1.18rem;
+        }
+
+        .news-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .float-shape {
+            position: fixed;
+            width: 68px;
+            height: 68px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: drift 14s linear infinite;
+        }
+
+        .float-shape::before,
+        .float-shape::after {
+            content: "";
+            position: absolute;
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .float-shape::before {
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+        }
+
+        .float-shape::after {
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+        }
+
+        .shape-one {
+            left: 8%;
+            bottom: 10%;
+        }
+
+        .shape-two {
+            right: 9%;
+            top: 18%;
+            width: 48px;
+            height: 48px;
+            animation-delay: -7s;
+        }
+
+        @keyframes floatPanel {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-14px); }
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { translate: 0 0; }
+            50% { translate: 0 -9px; }
+        }
+
+        @keyframes drift {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.52; }
+            50% { transform: translate3d(18px, -34px, 0) rotate(180deg); opacity: 0.9; }
+            100% { transform: translate3d(0, 0, 0) rotate(360deg); opacity: 0.52; }
+        }
+
+        @media (max-width: 1060px) {
+            .players {
+                grid-template-columns: repeat(3, minmax(190px, 1fr));
+            }
+        }
+
+        @media (max-width: 820px) {
+            .nav,
+            .hero {
+                align-items: start;
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                flex-direction: column;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page {
+                padding-inline: 16px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                border-radius: 8px;
+                flex-wrap: wrap;
+            }
+
+            .players {
+                grid-template-columns: 1fr;
+            }
+
+            .player-card {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-background" aria-hidden="true">
+        <video autoplay muted loop playsinline>
+            <source src="ballground.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <span class="float-shape shape-one"></span>
+    <span class="float-shape shape-two"></span>
+
+    <main class="page">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="brand">
+                <span class="logo">EH</span>
+                <span>MIRACLE Hoops Academy</span>
+            </div>
+            <div class="nav-links">
+                <a href="miracle.html">Home</a>
+                <a class="active" href="news.html">News</a>
+                <a href="teams.html">Teams</a>
+                <a href="label.html">Training</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <h1>Academy News</h1>
+                <p>Fresh court reports, standout performances, camp announcements, and player spotlights from the next wave of basketball talent.</p>
+            </div>
+            <article class="headline-panel">
+                <span>Breaking from the court</span>
+                <h2>U18 squad finishes spring showcase unbeaten</h2>
+                <p>The academy's top prospects closed the weekend with elite ball movement, disciplined defense, and five players earning scout notes.</p>
+            </article>
+        </section>
+
+        <div class="ticker" aria-label="Academy updates">
+            <span>Tryouts open Saturday</span>
+            <span>Skills lab starts 7:00 PM</span>
+            <span>Girls elite camp added</span>
+            <span>Film room every Friday</span>
+        </div>
+
+        <section class="section-title">
+            <h2>Player Watch</h2>
+        </section>
+
+        <section class="players" aria-label="Featured player cards">
+            <article class="player-card">
+                <img src="pg.jpg" alt="Jayden Cross attacking from the wing">
+                <div class="player-info">
+                    <small>Point Guard</small>
+                    <h3>Mukisa Miracle</h3>
+                    <p>Fast-break organizer with sharp handles and a calm fourth-quarter voice.</p>
+                    <div class="stats"><b>18 PPG</b><b>7 AST</b></div>
+                </div>
+            </article>
+
+            <article class="player-card">
+                <img src="heat.jpg" alt="Marcus Vale finishing at the rim">
+                <div class="player-info">
+                    <small>Shooting Guard</small>
+                    <h3>Jjuko Mahhad</h3>
+                    <p>Deep-range scorer who has added physical defense and quick closeouts.</p>
+                    <div class="stats"><b>42% 3PT</b><b>3 STL</b></div>
+                </div>
+            </article>
+
+            <article class="player-card">
+                <img src="lvb.jpg" alt="Elijah Stone boxing out under the basket">
+                <div class="player-info">
+                    <small>Forward</small>
+                    <h3>Elijah Stone</h3>
+                    <p>Versatile rebounder who can switch screens and finish through contact.</p>
+                    <div class="stats"><b>12 REB</b><b>2 BLK</b></div>
+                </div>
+            </article>
+
+            <article class="player-card">
+                <img src="roookie.jpg" alt="Noah Pierce preparing to shoot">
+                <div class="player-info">
+                    <small>Wing</small>
+                    <h3>Noah Pierce</h3>
+                    <p>Rising freshman with quick feet, smooth footwork, and fearless drives.</p>
+                    <div class="stats"><b>15 PPG</b><b>6 REB</b></div>
+                </div>
+            </article>
+
+            <article class="player-card">
+                <div class="poster" role="img" aria-label="Amari King academy player card">AK</div>
+                <div class="player-info">
+                    <small>Center</small>
+                    <h3>Amari King</h3>
+                    <p>Paint protector learning to pass from the high post and anchor the press.</p>
+                    <div class="stats"><b>9 BLK</b><b>64% FG</b></div>
+                </div>
+            </article>
+        </section>
+
+        <section class="news-grid" aria-label="Latest academy stories">
+            <article class="news-card">
+                <strong>Training</strong>
+                <h3>New finishing series added to weekly skills lab</h3>
+                <p>Coaches are focusing on stride stops, euro steps, reverse finishes, and contact balance for guards and wings.</p>
+            </article>
+            <article class="news-card">
+                <strong>Recruiting</strong>
+                <h3>Three academy athletes invited to regional combine</h3>
+                <p>The invite list rewards consistent grades, game film, and leadership during the spring showcase schedule.</p>
+            </article>
+            <article class="news-card">
+                <strong>Community</strong>
+                <h3>Saturday clinic welcomes younger players</h3>
+                <p>Academy captains will lead stations for shooting form, defensive slides, passing angles, and team communication.</p>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

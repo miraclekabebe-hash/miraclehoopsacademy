@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams | MIRACLE Hoops Academy</title>
+    <style>
+        :root {
+            --ink: #f8fafc;
+            --muted: #cbd5e1;
+            --line: rgba(255, 255, 255, 0.18);
+            --panel: rgba(9, 14, 28, 0.72);
+            --accent: #ff7a1a;
+            --accent-2: #21d4fd;
+            --court: #f8c471;
+            --headline-font: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+            --body-font: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            font-family: var(--body-font);
+            background: #080b14;
+            overflow-x: hidden;
+        }
+
+        .video-background,
+        .video-background::after {
+            position: fixed;
+            inset: 0;
+        }
+
+        .video-background {
+            z-index: -3;
+            overflow: hidden;
+        }
+
+        .video-background::after {
+            content: "";
+            z-index: 1;
+            background:
+                linear-gradient(90deg, rgba(4, 8, 18, 0.92), rgba(4, 8, 18, 0.5), rgba(4, 8, 18, 0.84)),
+                radial-gradient(circle at 82% 16%, rgba(255, 122, 26, 0.26), transparent 34%),
+                radial-gradient(circle at 10% 86%, rgba(33, 212, 253, 0.2), transparent 30%);
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.12) contrast(1.08);
+        }
+
+        .page {
+            position: relative;
+            min-height: 100vh;
+            padding: 28px clamp(18px, 4vw, 58px) 42px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1180px;
+            margin: 0 auto 58px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .logo {
+            display: grid;
+            width: 44px;
+            height: 44px;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            color: #111827;
+            background: linear-gradient(135deg, var(--court), var(--accent));
+            box-shadow: 0 12px 34px rgba(255, 122, 26, 0.24);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(8, 12, 24, 0.48);
+            backdrop-filter: blur(16px);
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 9px 14px;
+            border-radius: 999px;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        h1, h2, h3 {
+            font-family: var(--headline-font);
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            max-width: 1180px;
+            margin: 0 auto 46px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin: 0 0 10px;
+            line-height: 1;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .team-section {
+            max-width: 1180px;
+            margin: 60px auto;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .team-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+        }
+
+        .team-image {
+            height: 200px;
+            background: linear-gradient(45deg, #1e293b, #0f172a);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-info {
+            padding: 24px;
+        }
+
+        .team-info h3 {
+            margin: 0 0 10px;
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .team-info p {
+            color: var(--muted);
+            margin: 0 0 20px;
+            line-height: 1.6;
+        }
+
+        .roster-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .roster-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.95rem;
+        }
+
+        .roster-item:last-child {
+            border-bottom: none;
+        }
+
+        .roster-item span:first-child {
+            font-weight: bold;
+        }
+
+        footer {
+            max-width: 1180px;
+            margin: 60px auto 0;
+            padding: 20px 0;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-background" aria-hidden="true">
+        <video autoplay muted loop playsinline>
+            <source src="ballground.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <main class="page">
+        <nav class="nav">
+            <div class="brand">
+                <span class="logo">MH</span>
+                <span>MIRACLE Hoops Academy</span>
+            </div>
+            <div class="nav-links">
+                <a href="miracle.html">Home</a>
+                <a href="news.html">News</a>
+                <a class="active" href="teams.html">Teams</a>
+                <a href="label.html">Training</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <h1>Our Teams</h1>
+            <p>Building the next generation of champions. From grassroots to elite competition, our squads represent the heart of Miracle Hoops Academy.</p>
+        </section>
+
+        <div class="team-section">
+            <div class="team-grid">
+                <!-- Elite U18 Team -->
+                <article class="team-card">
+                    <div class="team-image">
+                        <img src="mks team 2.png" alt="Makindye Grizzlies">
+                    </div>
+                    <div class="team-info">
+                        <h3>Makindye Grizzlies</h3>
+                        <p>Our premier competitive team focusing on advanced tactics and collegiate preparation.</p>
+                        <div class="roster-list">
+                            <div class="roster-item"><span>Mukisa Miracle</span><span>PG</span></div>
+                            <div class="roster-item"><span>Jjuko Mahhad</span><span>SG</span></div>
+                            <div class="roster-item"><span>Lodu Martin</span><span>SF</span></div>
+                            <div class="roster-item"><span>Brandon James</span><span>PF</span></div>
+                            <div class="roster-item"><span>Buzaza Oneal</span><span>C</span></div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Stallions -->
+                <article class="team-card">
+                    <div class="team-image">
+                        <img src="mks team photo.png" alt="U15 Rising Stars">
+                    </div>
+                    <div class="team-info">
+                        <h3>STALLIONS</h3>
+                        <p>Developing fundamental skills and team chemistry for the next level of competition.</p>
+                        <div class="roster-list">
+                            <div class="roster-item"><span>Robin James</span><span>PG</span></div>
+                            <div class="roster-item"><span>Kiryowa carter</span><span>SG</span></div>
+                            <div class="roster-item"><span>Nameless</span><span>SF</span></div>
+                            <div class="roster-item"><span>Lil von</span><span>PF</span></div>
+                            <div class="roster-item"><span>Cool guy</span><span>C</span></div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Academy Development -->
+                <article class="team-card">
+                    <div class="team-image">
+                        <img src="lvb.jpg" alt="Development Squad">
+                    </div>
+                    <div class="team-info">
+                        <h3>Development Squad</h3>
+                        <p>Grassroots program focusing on the love of the game and core basketball foundations.</p>
+                        <div class="roster-list">
+                            <div class="roster-item"><span>Mutebi Eric</span><span>G</span></div>
+                            <div class="roster-item"><span>Kizza Mark</span><span>G</span></div>
+                            <div class="roster-item"><span>Lubega Fred</span><span>F</span></div>
+                            <div class="roster-item"><span>Semakula Dan</span><span>F</span></div>
+                            <div class="roster-item"><span>Namanda Sarah</span><span>C</span></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 MIRACLE Hoops Academy. All rights reserved. | Follow us on <a href="#" style="color: var(--accent);">Instagram</a></p>
+        </footer>
+    </main>
+</body>
+</html>
